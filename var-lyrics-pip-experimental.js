@@ -64,16 +64,16 @@
 
         setupTitleBarVisibility() {
             let hideTimeout;
-            const HIDE_DELAY = 1500; // 1.5 seconds before hiding (adjust as needed)
+            const HIDE_DELAY = 1700; 
             
-            // Show title bar when mouse enters PiP window
-            this.pipWindow.addEventListener('mouseenter', () => {
+            // Show title bar when mouse enters PiP window - attach to document
+            this.pipWindow.document.addEventListener('mouseenter', () => {
                 clearTimeout(hideTimeout);
                 this.titleBar.classList.remove('pip-title-bar-hidden');
             });
             
-            // Hide title bar when mouse leaves PiP window
-            this.pipWindow.addEventListener('mouseleave', () => {
+            // Hide title bar when mouse leaves PiP window - attach to document
+            this.pipWindow.document.addEventListener('mouseleave', () => {
                 hideTimeout = setTimeout(() => {
                     this.titleBar.classList.add('pip-title-bar-hidden');
                 }, HIDE_DELAY);
