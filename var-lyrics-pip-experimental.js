@@ -61,6 +61,24 @@
             return titleBar;
         }
 
+        setupTitleBarVisibility() {
+            let hideTimeout;
+            const HIDE_DELAY = 1500; // 1.5 seconds before hiding (adjust as needed)
+            
+            // Show title bar when mouse enters PiP window
+            this.pipWindow.addEventListener('mouseenter', () => {
+                clearTimeout(hideTimeout);
+                this.titleBar.classList.remove('pip-title-bar-hidden');
+            });
+            
+            // Hide title bar when mouse leaves PiP window
+            this.pipWindow.addEventListener('mouseleave', () => {
+                hideTimeout = setTimeout(() => {
+                    this.titleBar.classList.add('pip-title-bar-hidden');
+                }, HIDE_DELAY);
+            });
+        }
+
         createTrackProgressBar() {
             const progressContainer = document.createElement('div');
             progressContainer.className = 'pip-progress-container';
@@ -591,15 +609,22 @@
                     display: flex;
                     flex-direction: column;
                 }
-                .pip-title-bar {
+               .pip-title-bar {
                     height: 26px;
-                    background:  #000000;
+                    background: #000000;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
                     -webkit-app-region: drag;
                     width: 100%;
                     flex-shrink: 0;
+                    transition: height 0.3s ease, opacity 0.3s ease;
+                    overflow: hidden;
+                }
+
+                .pip-title-bar-hidden {
+                    height: 0;
+                    opacity: 0;
                 }
                 .pip-close-button {
                     background: transparent;
@@ -889,6 +914,7 @@
                     const container = document.createElement('div');
                     container.className = 'pip-container';
                     container.appendChild(this.createTitleBar());
+                    this.setupTitleBarVisibility();
                     
                     // Move the main view into the container
                     container.appendChild(this.mainViewElement);
