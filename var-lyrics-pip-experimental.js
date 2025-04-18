@@ -837,11 +837,6 @@
                     display: inline-block;                    
                 }
 
-                .pip-track-name:hover,
-                .pip-artist-name:hover {
-                    animation: scroll-text 5s linear forwards;
-                }
-
                 .pip-player-controls {
                     display: flex;
                     justify-content: center;
