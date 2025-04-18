@@ -9,6 +9,7 @@
             this.pipWindow = null;
             this.isEnabled = false;
             this.originalParent = null;
+            this.titleBar = null;
             this.mainViewElement = null;
             this.button = null;
             this.progressUpdateInterval = null;
@@ -913,7 +914,8 @@
                     // Create container with titlebar
                     const container = document.createElement('div');
                     container.className = 'pip-container';
-                    container.appendChild(this.createTitleBar());
+                    this.titleBar = this.createTitleBar()
+                    container.appendChild(this.titleBar);
                     this.setupTitleBarVisibility();
                     
                     // Move the main view into the container
