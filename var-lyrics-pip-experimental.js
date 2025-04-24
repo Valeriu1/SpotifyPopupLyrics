@@ -364,6 +364,34 @@
                 }, 200);
             };
 
+            // Add Spotify lyrics button
+            const lyricsButton = document.createElement('button');
+            lyricsButton.className = 'pip-control-button pip-lyrics-button responsive-control';
+            lyricsButton.dataset.priority = '2'; // Medium priority - hides second
+            lyricsButton.innerHTML = `
+                <svg role="img" height="16" width="16" viewBox="0 0 16 16" class="Svg-sc-ytk21e-0 dCszzJ">
+                    <path d="M13.426 2.574a2.831 2.831 0 0 0-4.797 1.55l3.247 3.247a2.831 2.831 0 0 0 1.55-4.797zM10.5 8.118l-2.619-2.62A63303.13 63303.13 0 0 0 4.74 9.075L2.065 12.12a1.287 1.287 0 0 0 1.816 1.816l3.06-2.688 3.56-3.129zM7.12 4.094a4.331 4.331 0 1 1 4.786 4.786l-3.974 3.493-3.06 2.689a2.787 2.787 0 0 1-3.933-3.933l2.676-3.045 3.505-3.99z"></path>
+                </svg>
+            `;
+            lyricsButton.onclick = () => {
+                // Open Spotify lyrics
+                Spicetify.Platform.History.push('/lyrics');
+            };
+
+            // Add beautiful lyrics button
+            const beautifulLyricsButton = document.createElement('button');
+            beautifulLyricsButton.className = 'pip-control-button pip-beautiful-lyrics-button responsive-control';
+            beautifulLyricsButton.dataset.priority = '2'; // Medium priority - hides second
+            beautifulLyricsButton.innerHTML = `
+                <svg role="img" height="16" width="16" viewBox="0 0 16 16" class="Svg-sc-ytk21e-0 dCszzJ">
+                    <path d="M1.69 2A2.31 2.31 0 0 0 0 4.31v7.38A2.31 2.31 0 0 0 2.31 14h7.38A2.31 2.31 0 0 0 12 11.69v-.69h.69A2.31 2.31 0 0 0 15 8.69V4a2 2 0 0 0-2-2H1.69Zm.081 1.5h11.48c.278 0 .5.222.5.5v4.69c0 .452-.348.81-.81.81H2.31A.81.81 0 0 1 1.5 8.69V4.31c0-.452.358-.81.81-.81Zm.42 7h6.95c.02 0 .035 0 .054.002A.81.81 0 0 1 10 11.69v.81a.81.81 0 0 1-.81.81H2.19a.81.81 0 0 1-.81-.81v-.81a.81.81 0 0 1 .81-.81Z"></path>
+                </svg>
+            `;
+            beautifulLyricsButton.onclick = () => {
+                // Open beautiful lyrics
+                Spicetify.Platform.History.push('/BeautifulLyrics/Page');
+            };
+
             // Create the SVG element and position it at bottom right
             const cornerSvg = document.createElement('div');
             cornerSvg.innerHTML = `<svg class="UuWUqZ0KXYAc2I1R_tdl" width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -380,9 +408,11 @@
             playerControls.appendChild(playPauseButton);
             playerControls.appendChild(nextButton);
             playerControls.appendChild(repeatButton);
+            playerControls.appendChild(lyricsButton); 
+            playerControls.appendChild(beautifulLyricsButton);
 
             // Store responsive controls for later use
-            this.responsiveControls = [shuffleButton, repeatButton, prevButton];
+            this.responsiveControls = [shuffleButton, repeatButton, prevButton, lyricsButton, beautifulLyricsButton];
 
             // Add now playing info and controls to wrapper
             playerControlsWrapper.appendChild(nowPlayingInfo);
