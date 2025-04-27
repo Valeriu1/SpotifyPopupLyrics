@@ -59,27 +59,27 @@
             buttonsContainer.className = 'title-bar-first';
 
             
-                        // Add Spotify lyrics button
-                        const lyricsButton = document.createElement('button');
-                        lyricsButton.className = 'pip-control-button pip-lyrics-button responsive-control';
-                        lyricsButton.innerHTML = this.getLyricsIcon();
-                        lyricsButton.onclick = () => {
-                            // Open Spotify lyrics
-                            Spicetify.Platform.History.push('/lyrics');
-                        };
-            
-                        // Add beautiful lyrics button
-                        const beautifulLyricsButton = document.createElement('button');
-                        beautifulLyricsButton.className = 'pip-control-button pip-beautiful-lyrics-button responsive-control';
-                        beautifulLyricsButton.innerHTML = this.getBeautifulLyricsIcon();
-                        beautifulLyricsButton.onclick = () => {
-                            // Open beautiful lyrics
-                            Spicetify.Platform.History.push('/BeautifulLyrics/Page');
-                        };
-            
-                        buttonsContainer.appendChild(lyricsButton);
-                        buttonsContainer.appendChild(beautifulLyricsButton);
-                        emptyDiv.appendChild(buttonsContainer);
+            // Add Spotify lyrics button
+            const lyricsButton = document.createElement('button');
+            lyricsButton.className = 'titlebar-lyrics-button';
+            lyricsButton.innerHTML = this.getLyricsIcon();
+            lyricsButton.onclick = () => {
+                // Open Spotify lyrics
+                Spicetify.Platform.History.push('/lyrics');
+            };
+
+            // Add beautiful lyrics button
+            const beautifulLyricsButton = document.createElement('button');
+            beautifulLyricsButton.className = 'titlebar-lyrics-button titlebar-lyrics-second-button';
+            beautifulLyricsButton.innerHTML = this.getBeautifulLyricsIcon();
+            beautifulLyricsButton.onclick = () => {
+                // Open beautiful lyrics
+                Spicetify.Platform.History.push('/BeautifulLyrics/Page');
+            };
+
+            buttonsContainer.appendChild(lyricsButton);
+            buttonsContainer.appendChild(beautifulLyricsButton);
+            emptyDiv.appendChild(buttonsContainer);
             titleBar.appendChild(emptyDiv);
             titleBar.appendChild(iconSpan);            
             titleBar.appendChild(closeButton);
@@ -331,7 +331,7 @@
             // Shuffle button
             const shuffleButton = document.createElement('button');
             shuffleButton.className = 'pip-control-button pip-shuffle-button responsive-control';
-            shuffleButton.dataset.priority = '3'; // Lowest priority - hides first
+            shuffleButton.dataset.priority = '3';
             shuffleButton.innerHTML = this.getShuffleIcon(window.Spicetify.Player.getShuffle());
             shuffleButton.onclick = () => {
                 window.Spicetify.Player.toggleShuffle();
@@ -379,7 +379,7 @@
             // Repeat button
             const repeatButton = document.createElement('button');
             repeatButton.className = 'pip-control-button pip-repeat-button responsive-control';
-            repeatButton.dataset.priority = '2'; // Medium priority - hides second
+            repeatButton.dataset.priority = '2';
             repeatButton.innerHTML = this.getRepeatIcon(window.Spicetify.Player.getRepeat());
             repeatButton.onclick = () => {
                 window.Spicetify.Player.toggleRepeat();
@@ -391,6 +391,7 @@
             // Add Spotify lyrics button
             const lyricsButton = document.createElement('button');
             lyricsButton.className = 'pip-control-button pip-lyrics-button responsive-control';
+            lyricsButton.dataset.priority = '5';
             lyricsButton.innerHTML = this.getLyricsIcon();
             lyricsButton.onclick = () => {
                 // Open Spotify lyrics
@@ -400,6 +401,7 @@
             // Add beautiful lyrics button
             const beautifulLyricsButton = document.createElement('button');
             beautifulLyricsButton.className = 'pip-control-button pip-beautiful-lyrics-button responsive-control';
+            beautifulLyricsButton.dataset.priority = '4';
             beautifulLyricsButton.innerHTML =this.getBeautifulLyricsIcon();
             beautifulLyricsButton.onclick = () => {
                 // Open beautiful lyrics
@@ -596,9 +598,11 @@
             
             // Widths at which controls should be hidden
             const breakpoints = [
-                { width: 400, hideControls: 1 }, // (shuffle)
-                { width: 350, hideControls: 2 }, // (repeat)
-                { width: 300, hideControls: 3 }  // (prev)
+                { width: 500, hideControls: 1 }, // (shuffle)
+                { width: 470, hideControls: 2 }, // (repeat)
+                { width: 430, hideControls: 3 },  // (prev)
+                { width: 380, hideControls: 4 },  // (prev)
+                { width: 350, hideControls: 5 },  // (prev)
             ];
             
             // Determine how many controls to hide
@@ -676,7 +680,7 @@
                     flex-direction: column;
                 }
                .pip-title-bar {
-                    height: 26px;
+                    height: 30px;
                     background: #000000;
                     display: flex;
                     align-items: center;
@@ -741,8 +745,12 @@
                 .ViewControls {
                    display: none !important;
                 }
+
+                .titlebar-lyrics-second-button {
+                     left: 30px;
+                }
                 
-                .pip-lyrics-button, .pip-beautiful-lyrics-button {
+                .titlebar-lyrics-button{
                     background: transparent;
                     border: none;
                     color: #fff;
@@ -752,8 +760,9 @@
                     height: 24px;
                     border-radius: 50%;
                     position:absolute;
+                    top: 5px;
                 }
-                    .pip-lyrics-button:hover, .pip-beautiful-lyrics-button:hover {\
+                    .titlebar-lyrics-button:hover{
                         transform: scale(1.1);
                         background-color: rgba(255, 255, 255, 0.1);
                     }
