@@ -1015,6 +1015,9 @@
                     // Move the main view into the container
                     container.appendChild(this.mainViewElement);
                     
+                    // Remove problematic divs and navigate to lyrics
+                    this.cleanupAndNavigateToLyrics();
+                    
                     // Create player controls container
                     const playerControlsContainer = document.createElement('div');
                     playerControlsContainer.className = 'pip-player-controls-container';
@@ -1055,10 +1058,97 @@
             }
         }
 
+        // Add this new method to handle cleanup and navigation
+        cleanupAndNavigateToLyrics() {
+            // Wait a bit for the PiP window to fully load
+            setTimeout(() => {
+                const pipDocument = this.pipWindow.document;
+                
+                // Remove the problematic divs
+                const mainDiv = pipDocument.getElementById('main');
+                if (mainDiv) {
+                    mainDiv.remove();
+                    console.log('Removed #main div');
+                }
+                
+                const modalPortals = pipDocument.querySelectorAll('.ReactModalPortal');
+                modalPortals.forEach(modal => {
+                    modal.remove();
+                    console.log('Removed ReactModalPortal div');
+                });
+                
+                // Navigate to lyrics page
+                try {
+                    Spicetify.Platform.History.push('/lyrics');
+                    console.log('Navigated to lyrics page');
+                } catch (error) {
+                    console.error('Failed to navigate to lyrics:', error);
+                }
+            }, 500); // Wait 500ms for the window to stabilize
+            
+            // Also set up a mutation observer to catch any new problematic divs
+            this.setupDivCleanupObserver();
+        }
+
+        // Add this method to continuously monitor and remove problematic divs
+        setupDivCleanupObserver() {
+            if (!this.pipWindow) return;
+            
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            // Check for main div
+                            if (node.id === 'main') {
+                                node.remove();
+                                console.log('Automatically removed #main div');
+                            }
+                            
+                            // Check for ReactModalPortal
+                            if (node.classList && node.classList.contains('ReactModalPortal')) {
+                                node.remove();
+                                console.log('Automatically removed ReactModalPortal div');
+                            }
+                            
+                            // Check children for these problematic divs
+                            if (node.querySelector) {
+                                const mainDiv = node.querySelector('#main');
+                                if (mainDiv) {
+                                    mainDiv.remove();
+                                    console.log('Automatically removed nested #main div');
+                                }
+                                
+                                const modalPortals = node.querySelectorAll('.ReactModalPortal');
+                                modalPortals.forEach(modal => {
+                                    modal.remove();
+                                    console.log('Automatically removed nested ReactModalPortal div');
+                                });
+                            }
+                        }
+                    });
+                });
+            });
+            
+            // Start observing
+            observer.observe(this.pipWindow.document.body, {
+                childList: true,
+                subtree: true
+            });
+            
+            // Store observer reference for cleanup
+            this.divCleanupObserver = observer;
+        }
+
         restoreMainView() {
              // Clear progress tracking
             if (this.progressUpdateInterval) {
                 clearInterval(this.progressUpdateInterval);
+            }
+
+            // Clean up the div cleanup observer
+            if (this.divCleanupObserver) {
+                this.divCleanupObserver.disconnect();
+                this.divCleanupObserver = null;
             }
 
             if (this.mainViewElement && this.originalParent) {
